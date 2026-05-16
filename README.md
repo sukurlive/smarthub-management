@@ -1,58 +1,394 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+## 📘 Smart-Hub Management System - README
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+<div align="center">
 
-## About Laravel
+![Laravel](https://img.shields.io/badge/Laravel-13-red?style=flat-square&logo=laravel)
+![PHP](https://img.shields.io/badge/PHP-8.2%2B-blue?style=flat-square&logo=php)
+![MySQL](https://img.shields.io/badge/MySQL-5.7%2B-orange?style=flat-square&logo=mysql)
+![Git](https://img.shields.io/badge/Git-F05032?style=flat-square&logo=git&logoColor=white)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+**Sistem Manajemen Peminjaman Ruang Kerja dan Peralatan Studio untuk Komunitas Kreatif**
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+[Fitur](#-fitur-utama) • [Instalasi](#-instalasi) • [API Documentation](#-api-documentation) • [Testing](#-testing-dengan-postman) • [Contributing](#-contributing)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+</div>
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Tentang Aplikasi
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+**Smart-Hub Management System** adalah aplikasi fullstack yang dibangun untuk membantu komunitas kreatif lokal dalam mengelola peminjaman ruang kerja dan peralatan studio secara mandiri. Aplikasi ini melayani dua jenis pengguna:
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+- **Admin** → Mengelola data inventaris dan peminjaman melalui dashboard web
+- **Member** → Melakukan check-in/check-out peralatan melalui aplikasi tablet menggunakan REST API
 
-## Agentic Development
+---
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## Fitur Utama
+
+### Admin (Web Dashboard)
+- Dashboard statistik real-time
+- CRUD inventaris peralatan studio
+- Monitoring peminjaman equipment
+- Manajemen data member
+
+### Member (API / Tablet)
+- Autentikasi menggunakan token (Laravel Sanctum)
+- Lihat daftar equipment yang tersedia
+- Pinjam equipment
+- Check-in equipment
+- Riwayat peminjaman pribadi
+
+### Fitur Tambahan
+- Notifikasi email konfirmasi check-in equipment (branch terpisah)
+
+---
+
+## Teknologi yang Digunakan
+
+| Kategori | Teknologi | Versi |
+|----------|-----------|-------|
+| Backend Framework | Laravel | 13 |
+| Frontend | Blade + Bootstrap | 5.3 |
+| Database | MySQL | 5.7+ |
+| API Authentication | Laravel Sanctum | 4.x |
+| Email | Laravel Mail | - |
+| Version Control | Git | - |
+| Asset Bundling | Vite | - |
+
+---
+
+## Kebutuhan Sistem
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+PHP >= 8.2
+Composer >= 2.0
+MySQL >= 5.7
+Node.js >= 18.0
+NPM >= 9.0
+Git >= 2.0
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+## Instalasi
 
-## Contributing
+### Langkah 1: Clone Repository
+```bash
+git clone https://gitlab.kulon.com/smart-hub-management.git
+cd smart-hub-management
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Langkah 2: Install Dependencies
+```bash
+composer install
+npm install
+npm run dev && npm run build
+```
+```bash
+composer require laravel/sanctum
+composer require laravel/ui
+```
 
-## Code of Conduct
+### Langkah 3: Konfigurasi Environment
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+APP_NAME="Smart-Hub Management System"
+APP_ENV=local
+APP_DEBUG=true
+APP_URL=http://localhost:8000
 
-## Security Vulnerabilities
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=db_smarthub
+DB_USERNAME=root
+DB_PASSWORD=
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=your-email@gmail.com
+MAIL_PASSWORD=your-app-password
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=noreply@smarthub.com
+MAIL_FROM_NAME="${APP_NAME}"
+```
 
-## License
+### Langkah 4: Setup Database
+```bash
+php artisan migrate
+php artisan db:seed
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### Langkah 5: Jalankan Aplikasi
+```bash
+php artisan serve
+```
+## API Documentation
+
+### Base URL
+```bash
+http://localhost:8000/api
+```
+
+### Authentication
+
+Semua endpoint (kecuali login) memerlukan Bearer Token:
+```bash
+Authorization: Bearer {your_access_token}
+Content-Type: application/json
+```
+
+### Endpoint List
+
+Auth Endpoints
+```bash
+Method	Endpoint	Deskripsi	Auth
+POST	/login	    Login	    Public
+POST	/logout	    Logout	    Required
+GET	    /me	        Data user	Required
+```
+
+Contoh Request Login:
+
+```bash
+POST /api/login
+Content-Type: application/json
+```bash
+{
+    "email": "member@example.com",
+    "password": "password"
+}
+```
+
+Response:
+
+```bash
+{
+    "access_token": "1|abc123def456...",
+    "token_type": "Bearer",
+    "user": {
+        "id": 2,
+        "name": "Member User",
+        "email": "member@example.com",
+        "role": "member"
+    }
+}
+```
+
+Equipment Endpoints
+```bash
+Method	Endpoint				Deskripsi				Auth
+GET		/equipment				Semua equipment			Required
+GET		/equipment/available	Equipment tersedia		Required
+GET		/equipment/{id}			Detail equipment		Required
+POST	/equipment				Tambah equipment		Admin
+PUT		/equipment/{id}			Update equipment		Admin
+DELETE	/equipment/{id}			Hapus equipment			Admin
+Loan 	Endpoints
+Method	Endpoint				Deskripsi	Auth
+GET		/loans					Semua peminjaman		Required
+GET		/my-loans				Peminjaman sendiri		Required
+POST	/loans					Pinjam equipment		Required
+POST	/loans/{id}/checkin		Kembalikan equipment	Required
+```
+
+Contoh Request Pinjam Equipment:
+
+
+POST /api/loans
+
+```bash
+Authorization: Bearer {token}
+Content-Type: application/json
+```
+
+```bash
+{
+    "equipment_id": 1,
+    "loan_date": "2026-05-16"
+}
+```
+
+Response:
+
+```bash
+{
+    "success": true,
+    "message": "Equipment borrowed successfully",
+    "data": {
+        "id": 1,
+        "user_id": 2,
+        "equipment_id": 1,
+        "loan_date": "2026-05-16",
+        "status": "checked_out"
+    }
+}
+```
+
+Response Status Codes
+
+```bash
+Code			Description
+200				Success
+201				Created
+400				Bad Request
+401				Unauthorized
+403				Forbidden
+404				Not Found
+500				Server Error
+```
+
+Testing dengan Postman
+
+
+Buat file Smart-Hub-API.postman_collection.json:
+
+```bash
+{
+  "info": {
+    "name": "Smart Hub Management API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Authentication",
+      "item": [
+        {
+          "name": "Login Member",
+          "request": {
+            "method": "POST",
+            "url": "http://localhost:8000/api/login",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\":\"member@example.com\",\"password\":\"password\"}"
+            }
+          }
+        },
+        {
+          "name": "Login Admin",
+          "request": {
+            "method": "POST",
+            "url": "http://localhost:8000/api/login",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\":\"admin@example.com\",\"password\":\"password\"}"
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "url": "http://localhost:8000/api/logout",
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}]
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Equipment",
+      "item": [
+        {
+          "name": "Get All Equipment",
+          "request": {
+            "method": "GET",
+            "url": "http://localhost:8000/api/equipment",
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}]
+          }
+        },
+        {
+          "name": "Get Available Equipment",
+          "request": {
+            "method": "GET",
+            "url": "http://localhost:8000/api/equipment/available",
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}]
+          }
+        },
+        {
+          "name": "Create Equipment (Admin)",
+          "request": {
+            "method": "POST",
+            "url": "http://localhost:8000/api/equipment",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"},
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\":\"New Equipment\",\"description\":\"Test\",\"status\":\"available\"}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Loans",
+      "item": [
+        {
+          "name": "Get All Loans",
+          "request": {
+            "method": "GET",
+            "url": "http://localhost:8000/api/loans",
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}]
+          }
+        },
+        {
+          "name": "Get My Loans",
+          "request": {
+            "method": "GET",
+            "url": "http://localhost:8000/api/my-loans",
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}]
+          }
+        },
+        {
+          "name": "Borrow Equipment",
+          "request": {
+            "method": "POST",
+            "url": "http://localhost:8000/api/loans",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"},
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"equipment_id\":1,\"loan_date\":\"2026-05-16\"}"
+            }
+          }
+        },
+        {
+          "name": "Checkin Equipment",
+          "request": {
+            "method": "POST",
+            "url": "http://localhost:8000/api/loans/1/checkin",
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}]
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "token",
+      "value": ""
+    }
+  ]
+}
+```
+
+Testing Checklist
+
+- Login Member → Dapat token
+- Get All Equipment → Status 200
+- Get Available Equipment → Hanya available
+- Borrow Equipment → Status borrowed
+- Get My Loans → Menampilkan peminjaman
+- Checkin Equipment → Status checked_in
+- Login Admin → Dapat token admin
+- Create Equipment (Admin) → Equipment baru
+- Logout → Token tidak valid

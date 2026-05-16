@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\LoanCheckedIn;
 use App\Http\Controllers\Controller;
 use App\Models\Loan;
 use App\Models\Equipment;
@@ -77,6 +78,7 @@ class LoanController extends Controller
         try {
             $loan->checkin();
             DB::commit();
+            event(new LoanCheckedIn($loan));
 
             return response()->json([
                 'success' => true,

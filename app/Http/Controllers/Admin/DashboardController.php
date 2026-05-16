@@ -15,16 +15,15 @@ class DashboardController extends Controller
         $availableEquipment = Equipment::where('status', 'available')->count();
         $activeLoans = Loan::where('status', 'checked_out')->count();
         $totalMembers = User::where('role', 'member')->count();
-
         $recentLoans = Loan::with(['user', 'equipment'])
             ->latest()
-            ->take(5)
+            ->take(10)
             ->get();
 
-        return view('admin.dashboard', compact(
-            'totalEquipment',
+        return view('admin.dashboard.index', compact(
+            'totalEquipment', 
             'availableEquipment', 
-            'activeLoans',
+            'activeLoans', 
             'totalMembers',
             'recentLoans'
         ));

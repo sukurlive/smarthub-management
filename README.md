@@ -3,13 +3,14 @@
 <div align="center">
 
 ![Laravel](https://img.shields.io/badge/Laravel-13-red?style=flat-square&logo=laravel)
-![PHP](https://img.shields.io/badge/PHP-8.2%2B-blue?style=flat-square&logo=php)
-![MySQL](https://img.shields.io/badge/MySQL-5.7%2B-orange?style=flat-square&logo=mysql)
+![InertiaJS](https://img.shields.io/badge/InertiaJS-Vue3-emerald?style=flat-square&logo=inertia)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-v4-blue?style=flat-square&logo=tailwindcss)
+![PostgreSQL](https://img.shields.io/badge/Supabase-PostgreSQL-blueviolet?style=flat-square&logo=supabase)
 ![Git](https://img.shields.io/badge/Git-F05032?style=flat-square&logo=git&logoColor=white)
 
 **Sistem Manajemen Peminjaman Ruang Kerja dan Peralatan Studio untuk Komunitas Kreatif**
 
-[Fitur](#-fitur-utama) • [Instalasi](#-instalasi) • [API Documentation](#-api-documentation) • [Testing](#-testing-dengan-postman) • [Contributing](#-contributing)
+[Fitur](#-fitur-utama) • [Teknologi](#-teknologi-yang-digunakan) • [Arsitektur Git](#-arsitektur-version-control-git) • [Instalasi](#-instalasi--setup) • [API Documentation](#-api-documentation)
 
 </div>
 
@@ -17,363 +18,150 @@
 
 ## Tentang Aplikasi
 
-**Smart-Hub Management System** adalah aplikasi fullstack yang dibangun untuk membantu komunitas kreatif lokal dalam mengelola peminjaman ruang kerja dan peralatan studio secara mandiri. Aplikasi ini melayani dua jenis pengguna:
-
-- **Admin** → Mengelola data inventaris dan peminjaman melalui dashboard web
-- **Member** → Melakukan check-in/check-out peralatan melalui aplikasi tablet menggunakan REST API
-
----
-
-## Fitur Utama
-
-### Admin (Web Dashboard)
-- Dashboard statistik real-time
-- CRUD inventaris peralatan studio
-- Monitoring peminjaman equipment
-- Manajemen data member
-
-### Member (API / Tablet)
-- Autentikasi menggunakan token (Laravel Sanctum)
-- Lihat daftar equipment yang tersedia
-- Pinjam equipment
-- Check-in equipment
-- Riwayat peminjaman pribadi
-
-### Fitur Tambahan
-- Notifikasi email konfirmasi check-in equipment (branch terpisah)
+**Smart-Hub Management System** adalah aplikasi web modern responsif (*mobile-responsive*) yang dirancang untuk membantu komunitas kreatif lokal mengelola peminjaman ruang kerja dan inventaris peralatan studio. Aplikasi ini mendukung dua jenis pengguna:
+- **Admin** → Mengelola inventaris peralatan (Master Data CRUD) dan memonitor seluruh transaksi peminjaman.
+- **Member** → Melakukan peminjaman alat yang tersedia dan melakukan *check-in* pengembalian secara mandiri melalui antarmuka responsif tablet/handheld.
 
 ---
 
-## Teknologi yang Digunakan
+## 🚀 Fitur Utama
 
-| Kategori | Teknologi | Versi |
-|----------|-----------|-------|
-| Backend Framework | Laravel | 13 |
-| Frontend | Blade + Bootstrap | 5.3 |
-| Database | MySQL | 5.7+ |
-| API Authentication | Laravel Sanctum | 4.x |
-| Email | Laravel Mail | - |
-| Version Control | Git | - |
-| Asset Bundling | Vite | - |
+### 1. Antarmuka Premium & Responsif (Web Client)
+- **Desain Modern**: Antarmuka berbasis *dark mode* premium dengan visual *glassmorphism* dan ornamen animasi halus.
+- **Mobile Responsive**: Tata letak adaptif khusus untuk tablet (*handheld*) dan smartphone. Layout tabel pada desktop bertransformasi otomatis menjadi layout kartu pada layar kecil.
+- **Dashboard Interaktif**: Statistik real-time mengenai jumlah peralatan tersedia, sedang dipinjam, maintenance, dan riwayat peminjaman aktif.
+
+### 2. Autentikasi & Token API
+- Login terintegrasi langsung dengan API backend Laravel.
+- Sistem mengamankan otorisasi dengan membangkitkan **Sanctum Token** setelah login, menyimpannya di browser `sessionStorage`, dan mengirimkannya otomatis sebagai header `Bearer Token` pada setiap request API (Axios).
+
+### 3. Modul Data Master (Admin Only)
+- **List Peralatan**: Menampilkan semua inventaris lengkap dengan badge status (`available`, `borrowed`, `maintenance`).
+- **Create Peralatan**: Menambah peralatan baru via modal form interaktif dengan validasi input.
+- **Delete Peralatan**: Menghapus item inventaris dengan konfirmasi modal untuk mencegah penghapusan tidak sengaja.
+
+### 4. Modul Transaksi Peminjaman & Check-in
+- **Pinjam Alat**: Member membuat transaksi peminjaman dengan memilih alat berstatus *Tersedia (available)* dan mengisi tanggal pinjam.
+- **Check-in Pengembalian**: Mengembalikan alat yang sedang dipinjam secara langsung.
+- **Validasi Transaksi**:
+  - Mencegah *double check-in* pada transaksi yang statusnya sudah kembali.
+  - Otomatis mengubah status alat kembali menjadi `available` agar siap dipinjam kembali.
 
 ---
 
-## Kebutuhan Sistem
+## 🛠️ Teknologi yang Digunakan
 
-```bash
-PHP >= 8.2
-Composer >= 2.0
-MySQL >= 5.7
-Node.js >= 18.0
-NPM >= 9.0
-Git >= 2.0
-```
+| Kategori | Teknologi | Keterangan |
+|----------|-----------|------------|
+| **Backend Framework** | Laravel 13 | Core backend API & routing web |
+| **Frontend Framework**| Inertia.js (Vue 3) | Single Page Application (SPA) bridge |
+| **Styling Engine**    | Tailwind CSS v4 & Custom CSS | Desain premium, responsif, & glassmorphism |
+| **Database Cloud**    | Supabase (PostgreSQL) | Serverless relational database hosting |
+| **Authentication**    | Laravel Sanctum | Token-based API Authentication |
+| **Version Control**   | Git | Manajemen kode & strategi kolaborasi |
 
-## Instalasi
+---
 
-### Langkah 1: Clone Repository
+## 📂 Arsitektur Version Control (Git)
+
+Untuk mencegah bentrokan kode (*merge conflict*) antara tim Frontend dan Backend, aplikasi ini dirancang agar siap dipisahkan menggunakan **Dual-Repository Strategy**:
+1. **Repositori Backend API**: Berisi migrasi database, model data, seeder, unit test API, dan controller REST API (`routes/api.php`).
+2. **Repositori Web Frontend**: Berisi views utama (`resources/views/app.blade.php`), file JS/Vue (`resources/js/Pages` & `resources/js/Layouts`), dan rute antarmuka (`routes/web.php`) yang memanggil backend controller untuk merender halaman Inertia.
+
+---
+
+## 📥 Instalasi & Setup
+
+### Langkah 1: Klon Repositori
 ```bash
 git clone https://github.com/sukurlive/smarthub-management.git
-cd smart-hub-management
+cd smarthub-management
 ```
 
-### Langkah 2: Install Dependencies
+### Langkah 2: Instalasi Dependensi
+Instal dependensi Composer (PHP) dan NPM (JavaScript):
 ```bash
+# Instal dependensi backend
 composer install
+
+# Instal dependensi frontend
 npm install
-npm run dev && npm run build
-```
-```bash
-composer require laravel/sanctum
-composer require laravel/ui
 ```
 
-### Langkah 3: Konfigurasi Environment
+### Langkah 3: Konfigurasi Environment `.env`
+Salin file `.env.example` menjadi `.env` dan generates key aplikasi:
 ```bash
 cp .env.example .env
 php artisan key:generate
 ```
-
-```bash
-# Setup Supabase di .env
-# Edit DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, DB_PASSWORD
+Hubungkan database ke serverless **Supabase PostgreSQL** dengan memperbarui variabel koneksi berikut di file `.env`:
+```env
+DB_CONNECTION=pgsql
+DB_HOST=aws-0-ap-northeast-1.pooler.supabase.com
+DB_PORT=5432
+DB_DATABASE=postgres
+DB_USERNAME=postgres.[project-reference]
+DB_PASSWORD=[password-database-supabase]
+DB_SSLMODE=require
 ```
 
-### Langkah 4: Setup Database
+### Langkah 4: Migrasi & Seeding Database
+Jalankan migrasi tabel beserta pengisian data awal dummy (Admin, Member, & Equipment):
 ```bash
 php artisan migrate
 php artisan db:seed
 ```
 
-### Langkah 5: Jalankan Aplikasi
+### Langkah 5: Jalankan Aplikasi secara Lokal
+Jalankan development server Laravel dan kompilasi Vite secara paralel:
 ```bash
+# Jalankan Vite dev server
+npm run dev
+
+# Jalankan server lokal Laravel
 php artisan serve
 ```
-## API Documentation
+Buka peramban browser Anda ke alamat `http://127.0.0.1:8000`.
+
+---
+
+## 📊 API Documentation
 
 ### Base URL
 ```bash
 http://localhost:8000/api
 ```
 
-### Authentication
-
-Semua endpoint (kecuali login) memerlukan Bearer Token:
+### Autentikasi API
+Seluruh endpoint API (kecuali login) memerlukan bearer token yang didapatkan dari respons login:
 ```bash
 Authorization: Bearer {your_access_token}
-Content-Type: application/json
+Accept: application/json
 ```
 
-### Endpoint List
+### Daftar Endpoint API
 
-Auth Endpoints
-```bash
-Method	  Endpoint	  Deskripsi	    Auth
-POST      /login	    Login	        Public
-POST	    /logout	    Logout	      Required
-GET	      /me	        Data user	    Required
-```
+#### 1. Endpoint Autentikasi
+| Method | Endpoint | Deskripsi | Status |
+|--------|----------|-----------|--------|
+| `POST` | `/api/login` | Login user untuk mendapat token Sanctum | Public |
+| `POST` | `/api/logout` | Logout user dan menghapus token | Token Required |
+| `GET`  | `/api/me` | Mengambil data user yang sedang login | Token Required |
 
-Contoh Request Login:
+#### 2. Endpoint Equipment (Inventaris)
+| Method | Endpoint | Deskripsi | Akses |
+|--------|----------|-----------|-------|
+| `GET`  | `/api/equipment` | Mengambil daftar semua equipment | Member & Admin |
+| `GET`  | `/api/equipment/available` | Mengambil daftar alat berstatus `available` | Member & Admin |
+| `GET`  | `/api/equipment/{id}` | Mengambil detail alat berdasarkan ID | Member & Admin |
+| `POST` | `/api/equipment` | Menambahkan data alat baru | Admin Only |
+| `PUT`  | `/api/equipment/{id}` | Mengubah data alat | Admin Only |
+| `DELETE`| `/api/equipment/{id}` | Menghapus alat dari inventaris | Admin Only |
 
-```bash
-POST /api/login
-Content-Type: application/json
-```bash
-{
-    "email": "member@example.com",
-    "password": "password"
-}
-```
-
-Response:
-
-```bash
-{
-    "access_token": "1|abc123def456...",
-    "token_type": "Bearer",
-    "user": {
-        "id": 2,
-        "name": "Member User",
-        "email": "member@example.com",
-        "role": "member"
-    }
-}
-```
-
-Equipment Endpoints:
-
-```bash
-Method	 Endpoint				        Deskripsi				      Auth
-GET		   /equipment				      Semua equipment			  Required
-GET		   /equipment/available	  Equipment tersedia	  Required
-GET		   /equipment/{id}			  Detail equipment		  Required
-POST	   /equipment				      Tambah equipment		  Admin
-PUT		   /equipment/{id}			  Update equipment		  Admin
-DELETE	 /equipment/{id}			  Hapus equipment			  Admin
-```
-Loan    Endpoints:
-
-```bash
-Method	Endpoint				         Deskripsi	          Auth
-GET		   /loans					         Semua peminjaman		  Required
-GET		   /my-loans				       Peminjaman sendiri		Required
-POST	   /loans					         Pinjam equipment		  Required
-POST	   /loans/{id}/checkin		 Kembalikan equipment	Required
-```
-
-Contoh Request Pinjam Equipment:
-
-POST /api/loans
-
-```bash
-Authorization: Bearer {token}
-Content-Type: application/json
-```
-
-```bash
-{
-    "equipment_id": 1,
-    "loan_date": "2026-05-16"
-}
-```
-
-Response:
-
-```bash
-{
-    "success": true,
-    "message": "Equipment borrowed successfully",
-    "data": {
-        "id": 1,
-        "user_id": 2,
-        "equipment_id": 1,
-        "loan_date": "2026-05-16",
-        "status": "checked_out"
-    }
-}
-```
-
-Response Status Codes
-
-```bash
-Code			Description
-200				Success
-201				Created
-400				Bad Request
-401				Unauthorized
-403				Forbidden
-404				Not Found
-500				Server Error
-```
-
-Testing dengan Postman
-
-
-Buat file Smart-Hub-API.postman_collection.json:
-
-```bash
-{
-  "info": {
-    "name": "Smart Hub Management API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-  },
-  "item": [
-    {
-      "name": "1. Authentication",
-      "item": [
-        {
-          "name": "Login Member",
-          "request": {
-            "method": "POST",
-            "url": "http://localhost:8000/api/login",
-            "header": [{"key": "Content-Type", "value": "application/json"}],
-            "body": {
-              "mode": "raw",
-              "raw": "{\"email\":\"member@example.com\",\"password\":\"password\"}"
-            }
-          }
-        },
-        {
-          "name": "Login Admin",
-          "request": {
-            "method": "POST",
-            "url": "http://localhost:8000/api/login",
-            "header": [{"key": "Content-Type", "value": "application/json"}],
-            "body": {
-              "mode": "raw",
-              "raw": "{\"email\":\"admin@example.com\",\"password\":\"password\"}"
-            }
-          }
-        },
-        {
-          "name": "Logout",
-          "request": {
-            "method": "POST",
-            "url": "http://localhost:8000/api/logout",
-            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}]
-          }
-        }
-      ]
-    },
-    {
-      "name": "2. Equipment",
-      "item": [
-        {
-          "name": "Get All Equipment",
-          "request": {
-            "method": "GET",
-            "url": "http://localhost:8000/api/equipment",
-            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}]
-          }
-        },
-        {
-          "name": "Get Available Equipment",
-          "request": {
-            "method": "GET",
-            "url": "http://localhost:8000/api/equipment/available",
-            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}]
-          }
-        },
-        {
-          "name": "Create Equipment (Admin)",
-          "request": {
-            "method": "POST",
-            "url": "http://localhost:8000/api/equipment",
-            "header": [
-              {"key": "Authorization", "value": "Bearer {{token}}"},
-              {"key": "Content-Type", "value": "application/json"}
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\"name\":\"New Equipment\",\"description\":\"Test\",\"status\":\"available\"}"
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "3. Loans",
-      "item": [
-        {
-          "name": "Get All Loans",
-          "request": {
-            "method": "GET",
-            "url": "http://localhost:8000/api/loans",
-            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}]
-          }
-        },
-        {
-          "name": "Get My Loans",
-          "request": {
-            "method": "GET",
-            "url": "http://localhost:8000/api/my-loans",
-            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}]
-          }
-        },
-        {
-          "name": "Borrow Equipment",
-          "request": {
-            "method": "POST",
-            "url": "http://localhost:8000/api/loans",
-            "header": [
-              {"key": "Authorization", "value": "Bearer {{token}}"},
-              {"key": "Content-Type", "value": "application/json"}
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\"equipment_id\":1,\"loan_date\":\"2026-05-16\"}"
-            }
-          }
-        },
-        {
-          "name": "Checkin Equipment",
-          "request": {
-            "method": "POST",
-            "url": "http://localhost:8000/api/loans/1/checkin",
-            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}]
-          }
-        }
-      ]
-    }
-  ],
-  "variable": [
-    {
-      "key": "token",
-      "value": ""
-    }
-  ]
-}
-```
-
-Testing Checklist
-
-- Login Member → Dapat token
-- Get All Equipment → Status 200
-- Get Available Equipment → Hanya available
-- Borrow Equipment → Status borrowed
-- Get My Loans → Menampilkan peminjaman
-- Checkin Equipment → Status checked_in
-- Login Admin → Dapat token admin
-- Create Equipment (Admin) → Equipment baru
-- Logout → Token tidak valid
+#### 3. Endpoint Transaksi Peminjaman (Loans)
+| Method | Endpoint | Deskripsi | Akses |
+|--------|----------|-----------|-------|
+| `GET`  | `/api/loans` | Mengambil semua transaksi peminjaman | Admin Only |
+| `GET`  | `/api/my-loans` | Mengambil riwayat peminjaman user aktif | Member & Admin |
+| `POST` | `/api/loans` | Membuat transaksi peminjaman baru | Member & Admin |
+| `POST` | `/api/loans/{id}/checkin` | Mengembalikan peralatan (check-in) | Member & Admin |

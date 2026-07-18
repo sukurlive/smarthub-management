@@ -73,7 +73,7 @@ Git >= 2.0
 
 ### Langkah 1: Clone Repository
 ```bash
-git clone https://gitlab.kulon.com/smart-hub-management.git
+git clone https://github.com/sukurlive/smarthub-management.git
 cd smart-hub-management
 ```
 
@@ -95,26 +95,8 @@ php artisan key:generate
 ```
 
 ```bash
-APP_NAME="Smart-Hub Management System"
-APP_ENV=local
-APP_DEBUG=true
-APP_URL=http://localhost:8000
-
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=db_smarthub
-DB_USERNAME=root
-DB_PASSWORD=
-
-MAIL_MAILER=smtp
-MAIL_HOST=smtp.gmail.com
-MAIL_PORT=587
-MAIL_USERNAME=your-email@gmail.com
-MAIL_PASSWORD=your-app-password
-MAIL_ENCRYPTION=tls
-MAIL_FROM_ADDRESS=noreply@smarthub.com
-MAIL_FROM_NAME="${APP_NAME}"
+# Setup Supabase di .env
+# Edit DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, DB_PASSWORD
 ```
 
 ### Langkah 4: Setup Database
@@ -146,10 +128,10 @@ Content-Type: application/json
 
 Auth Endpoints
 ```bash
-Method	Endpoint	Deskripsi	Auth
-POST	/login	    Login	    Public
-POST	/logout	    Logout	    Required
-GET	    /me	        Data user	Required
+Method	  Endpoint	  Deskripsi	    Auth
+POST      /login	    Login	        Public
+POST	    /logout	    Logout	      Required
+GET	      /me	        Data user	    Required
 ```
 
 Contoh Request Login:
@@ -179,25 +161,28 @@ Response:
 }
 ```
 
-Equipment Endpoints
+Equipment Endpoints:
+
 ```bash
-Method	Endpoint				Deskripsi				Auth
-GET		/equipment				Semua equipment			Required
-GET		/equipment/available	Equipment tersedia		Required
-GET		/equipment/{id}			Detail equipment		Required
-POST	/equipment				Tambah equipment		Admin
-PUT		/equipment/{id}			Update equipment		Admin
-DELETE	/equipment/{id}			Hapus equipment			Admin
-Loan 	Endpoints
-Method	Endpoint				Deskripsi	Auth
-GET		/loans					Semua peminjaman		Required
-GET		/my-loans				Peminjaman sendiri		Required
-POST	/loans					Pinjam equipment		Required
-POST	/loans/{id}/checkin		Kembalikan equipment	Required
+Method	 Endpoint				        Deskripsi				      Auth
+GET		   /equipment				      Semua equipment			  Required
+GET		   /equipment/available	  Equipment tersedia	  Required
+GET		   /equipment/{id}			  Detail equipment		  Required
+POST	   /equipment				      Tambah equipment		  Admin
+PUT		   /equipment/{id}			  Update equipment		  Admin
+DELETE	 /equipment/{id}			  Hapus equipment			  Admin
+```
+Loan    Endpoints:
+
+```bash
+Method	Endpoint				         Deskripsi	          Auth
+GET		   /loans					         Semua peminjaman		  Required
+GET		   /my-loans				       Peminjaman sendiri		Required
+POST	   /loans					         Pinjam equipment		  Required
+POST	   /loans/{id}/checkin		 Kembalikan equipment	Required
 ```
 
 Contoh Request Pinjam Equipment:
-
 
 POST /api/loans
 

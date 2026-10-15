@@ -2,7 +2,6 @@
 
 namespace App\Events;
 
-use App\Models\Loan;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -20,7 +19,7 @@ class LoanCheckedIn
      */
     public function __construct()
     {
-        $this->loan = $loan;
+        //
     }
 
     /**
